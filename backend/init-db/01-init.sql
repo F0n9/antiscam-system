@@ -1,11 +1,5 @@
--- ============================================================================
--- SCRIPT KHỞI TẠO TỰ ĐỘNG CƠ SỞ DỮ LIỆU POSTGRESQL (ANTISCAM PLATFORM)
--- Tự động chạy khi khởi động container lần đầu tiên
--- ============================================================================
-
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
--- 1. Bảng người dùng
 CREATE TABLE IF NOT EXISTS users (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     full_name VARCHAR(100) NOT NULL,
@@ -17,7 +11,6 @@ CREATE TABLE IF NOT EXISTS users (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- 2. Bảng thiết bị người dùng (FCM Token phục vụ thông báo SOS)
 CREATE TABLE IF NOT EXISTS user_devices (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -29,7 +22,6 @@ CREATE TABLE IF NOT EXISTS user_devices (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- 3. Bảng liên kết bảo hộ gia đình
 CREATE TABLE IF NOT EXISTS family_guardians (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -40,7 +32,6 @@ CREATE TABLE IF NOT EXISTS family_guardians (
     CONSTRAINT unique_user_guardian UNIQUE(user_id, guardian_id)
 );
 
--- 4. Bảng nhật ký sự cố khẩn cấp SOS
 CREATE TABLE IF NOT EXISTS sos_alerts (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -55,7 +46,6 @@ CREATE TABLE IF NOT EXISTS sos_alerts (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- 5. Bảng báo cáo lừa đảo từ cộng đồng
 CREATE TABLE IF NOT EXISTS scam_reports (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     reporter_id UUID REFERENCES users(id) ON DELETE SET NULL,
@@ -74,7 +64,6 @@ CREATE TABLE IF NOT EXISTS scam_reports (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- 6. Bảng mã băm tri giác hình ảnh gian lận
 CREATE TABLE IF NOT EXISTS image_hashes (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     report_id UUID NOT NULL REFERENCES scam_reports(id) ON DELETE CASCADE,
@@ -83,7 +72,6 @@ CREATE TABLE IF NOT EXISTS image_hashes (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- 7. Bảng khiếu nại minh oan chính chủ
 CREATE TABLE IF NOT EXISTS disputes (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     report_id UUID NOT NULL REFERENCES scam_reports(id) ON DELETE CASCADE,
@@ -97,7 +85,6 @@ CREATE TABLE IF NOT EXISTS disputes (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- 8. Bảng lịch sử tra cứu của người dùng
 CREATE TABLE IF NOT EXISTS lookup_history (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID REFERENCES users(id) ON DELETE SET NULL,
@@ -110,7 +97,6 @@ CREATE TABLE IF NOT EXISTS lookup_history (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- Tạo chỉ mục tìm kiếm
 CREATE INDEX IF NOT EXISTS idx_reports_entity ON scam_reports(entity_type, entity_value);
 CREATE INDEX IF NOT EXISTS idx_reports_location ON scam_reports(lat, lng);
 CREATE INDEX IF NOT EXISTS idx_image_hashes_phash ON image_hashes(phash);

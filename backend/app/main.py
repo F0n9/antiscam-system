@@ -3,13 +3,11 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(
     title="AntiScam Platform API",
-    description="Hệ thống kiểm chứng và cảnh báo lừa đảo trực tuyến bằng đồ thị liên kết thực thể (Nhóm 03 - NMCNPM)",
     version="1.0.0",
     docs_url="/docs",
     redoc_url="/redoc"
 )
 
-# Cấu hình CORS để Web Frontend (Next.js) và Android App có thể gọi API
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -18,21 +16,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/health", tags=["Health Check"])
+@app.get("/health", tags=["Health"])
 async def health_check():
-    """Kiểm tra tình trạng hoạt động của API máy chủ."""
     return {
         "status": "healthy",
         "service": "antiscam-backend",
         "version": "1.0.0"
     }
 
-@app.get("/api/v1/mock/verify-demo", tags=["Mock Data Demo"])
+@app.get("/api/v1/mock/verify-demo", tags=["Mock"])
 async def mock_verify_demo(account_number: str = "1029384756"):
-    """
-    Dữ liệu mẫu (Mock) cho Web Frontend và Android App test chức năng 
-    khi chưa kết nối cơ sở dữ liệu thật.
-    """
     return {
         "success": True,
         "data": {
@@ -53,4 +46,3 @@ async def mock_verify_demo(account_number: str = "1029384756"):
             ]
         }
     }
-

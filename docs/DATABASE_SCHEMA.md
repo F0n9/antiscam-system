@@ -1,20 +1,16 @@
-# THIẾT KẾ CƠ SỞ DỮ LIỆU TOÀN DIỆN (DATABASE SCHEMA)
+# Thiết kế cơ sở dữ liệu (Database Schema)
 
-Hệ thống kết hợp mô hình lưu trữ kép (Hybrid Database Architecture):
-1. **PostgreSQL 16:** Quản lý dữ liệu người dùng, liên kết gia đình SOS, mã FCM thiết bị, báo cáo lừa đảo, nhật ký sự cố khẩn cấp và khiếu nại.
-2. **Neo4j 5.18:** Mô hình hóa mạng lưới quan hệ đa chiều giữa *Số điện thoại, Số tài khoản ngân hàng, Trang cá nhân mạng xã hội (Zalo/Facebook), Mã băm ảnh và Báo cáo vi phạm*, phục vụ thuật toán truy vết 3 bước và tính điểm tín nhiệm.
+Hệ thống kết hợp mô hình lưu trữ kép:
+1. **PostgreSQL 16:** Quản lý dữ liệu người dùng, thiết bị, liên kết gia đình SOS, tố cáo và nhật ký sự cố.
+2. **Neo4j 5.18:** Mô hình hóa đồ thị liên kết thực thể (*Số điện thoại, Số tài khoản, Mạng xã hội, Mã băm ảnh, Báo cáo vi phạm*).
 
 ---
 
-## 1. Cơ sở dữ liệu quan hệ (PostgreSQL 16)
+## 1. Cơ sở dữ liệu quan hệ (PostgreSQL)
 
 ```sql
--- Kích hoạt extension UUID
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
--- ============================================================================
--- 1. BẢNG NGƯỜI DÙNG (USERS)
--- ============================================================================
 CREATE TABLE users (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     full_name VARCHAR(100) NOT NULL,
@@ -26,9 +22,6 @@ CREATE TABLE users (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- ============================================================================
--- 2. BẢNG THIẾT BỊ NGƯỜI DÙNG (USER_DEVICES) - Phục vụ bắn thông báo đẩy FCM
--- ============================================================================
 CREATE TABLE user_devices (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -40,28 +33,22 @@ CREATE TABLE user_devices (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- ============================================================================
--- 3. BẢNG LIÊN KẾT BẢO HỘ GIA ĐÌNH (FAMILY_GUARDIANS)
--- ============================================================================
 CREATE TABLE family_guardians (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     guardian_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    relationship VARCHAR(50) NOT NULL, -- "Cha/Mẹ", "Con cái", "Vợ/Chồng", "Người giám hộ"
+    relationship VARCHAR(50) NOT NULL,
     is_confirmed BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT unique_user_guardian UNIQUE(user_id, guardian_id)
 );
 
--- ============================================================================
--- 4. BẢNG SỰ CỐ KHẨN CẤP SOS (SOS_ALERTS) - Nhật ký kích hoạt báo động
--- ============================================================================
 CREATE TABLE sos_alerts (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     guardian_id UUID REFERENCES users(id) ON DELETE SET NULL,
-    trigger_reason VARCHAR(100) NOT NULL, -- "CALL_SCREENING_CRITICAL", "VIETQR_CRITICAL_TRANSFER"
-    suspicious_value VARCHAR(100) NOT NULL, -- Số điện thoại hoặc Số tài khoản nghi vấn
+    trigger_reason VARCHAR(100) NOT NULL,
+    suspicious_value VARCHAR(100) NOT NULL,
     risk_score DOUBLE PRECISION NOT NULL,
     lat DOUBLE PRECISION,
     lng DOUBLE PRECISION,
@@ -70,19 +57,16 @@ CREATE TABLE sos_alerts (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- ============================================================================
--- 5. BẢNG BÁO CÁO TỐ CÁO LỪA ĐẢO (SCAM_REPORTS)
--- ============================================================================
 CREATE TABLE scam_reports (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     reporter_id UUID REFERENCES users(id) ON DELETE SET NULL,
     entity_type VARCHAR(30) NOT NULL CHECK (entity_type IN ('bank_account', 'phone_number', 'social_profile')),
     entity_value VARCHAR(100) NOT NULL,
-    bank_code VARCHAR(20), -- Mã BIN ngân hàng (970415, 970436,...) nếu là bank_account
+    bank_code VARCHAR(20),
     incident_type VARCHAR(50) NOT NULL CHECK (incident_type IN ('DEPOSIT_SCAM', 'RECRUIT_SCAM', 'IMPERSONATION_SCAM')),
     title VARCHAR(200) NOT NULL,
     description TEXT NOT NULL,
-    evidence_image_url TEXT NOT NULL, -- Ảnh chụp ủy nhiệm chi/biên lai chuyển khoản
+    evidence_image_url TEXT NOT NULL,
     status VARCHAR(30) DEFAULT 'PENDING' CHECK (status IN ('PENDING', 'APPROVED', 'REJECTED', 'DISPUTED')),
     reviewer_id UUID REFERENCES users(id),
     reviewed_at TIMESTAMP WITH TIME ZONE,
@@ -91,9 +75,6 @@ CREATE TABLE scam_reports (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- ============================================================================
--- 6. BẢNG MÃ BĂM TRI GIÁC ẢNH GIAN LẬN (IMAGE_HASHES)
--- ============================================================================
 CREATE TABLE image_hashes (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     report_id UUID NOT NULL REFERENCES scam_reports(id) ON DELETE CASCADE,
@@ -102,9 +83,6 @@ CREATE TABLE image_hashes (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- ============================================================================
--- 7. BẢNG KHIẾU NẠI & MINH OAN CHÍNH CHỦ (DISPUTES)
--- ============================================================================
 CREATE TABLE disputes (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     report_id UUID NOT NULL REFERENCES scam_reports(id) ON DELETE CASCADE,
@@ -118,9 +96,6 @@ CREATE TABLE disputes (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- ============================================================================
--- 8. BẢNG LỊCH SỬ TRA CỨU & KIỂM CHỨNG (LOOKUP_HISTORY)
--- ============================================================================
 CREATE TABLE lookup_history (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID REFERENCES users(id) ON DELETE SET NULL,
@@ -133,7 +108,6 @@ CREATE TABLE lookup_history (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- Chỉ mục tối ưu hóa hiệu năng
 CREATE INDEX idx_reports_entity ON scam_reports(entity_type, entity_value);
 CREATE INDEX idx_reports_location ON scam_reports(lat, lng);
 CREATE INDEX idx_image_hashes_phash ON image_hashes(phash);
@@ -144,34 +118,16 @@ CREATE INDEX idx_lookup_history_entity ON lookup_history(entity_value);
 
 ---
 
-## 2. Cơ sở dữ liệu đồ thị (Neo4j 5.18)
+## 2. Cơ sở dữ liệu đồ thị (Neo4j)
 
-### 2.1. Nhãn nút (Node Labels) & Thuộc tính
-1. **`:PhoneNumber`**
-   * `phone`: String (Số điện thoại, Khóa định danh duy nhất)
-   * `carrier`: String (Nhà mạng: Viettel, Vinaphone, Mobifone,...)
-   * `risk_score`: Float (Điểm rủi ro tích lũy)
-2. **`:BankAccount`**
-   * `account_number`: String (Số tài khoản)
-   * `bank_bin`: String (Mã định danh ngân hàng VietQR, ví dụ: 970415)
-   * `bank_name`: String (VietinBank, Vietcombank,...)
-   * `account_name`: String (Tên chủ thẻ/tài khoản)
-3. **`:SocialProfile`**
-   * `profile_id`: String (Định danh trang cá nhân, Khóa duy nhất)
-   * `platform`: String ("Facebook", "Zalo", "Telegram")
-   * `profile_name`: String (Tên hiển thị)
-   * `profile_url`: String (Đường dẫn trang cá nhân)
-4. **`:ScamReport`**
-   * `report_id`: String (Khóa duy nhất tham chiếu sang PostgreSQL)
-   * `incident_type`: String ("DEPOSIT_SCAM", "RECRUIT_SCAM", "IMPERSONATION_SCAM")
-   * `is_verified`: Boolean (Đã được kiểm duyệt xác nhận vi phạm)
-   * `created_at`: String (Thời điểm báo cáo)
-5. **`:ImagePhash`**
-   * `hash_value`: String (Chuỗi hex mã băm tri giác 64-bit)
+### 2.1. Nhãn nút (Node Labels)
+* `:PhoneNumber` { `phone`, `carrier`, `risk_score` }
+* `:BankAccount` { `account_number`, `bank_bin`, `bank_name`, `account_name` }
+* `:SocialProfile` { `profile_id`, `platform`, `profile_name`, `profile_url` }
+* `:ScamReport` { `report_id`, `incident_type`, `is_verified`, `created_at` }
+* `:ImagePhash` { `hash_value` }
 
----
-
-### 2.2. Các mối quan hệ (Relationships)
+### 2.2. Quan hệ (Relationships)
 
 ```mermaid
 erDiagram
@@ -185,12 +141,9 @@ erDiagram
     ScamReport ||--o{ ImagePhash : "CONTAINS_IMAGE"
 ```
 
----
-
-### 2.3. Lệnh tạo ràng buộc & Chỉ mục (Cypher DDL)
+### 2.3. Ràng buộc toàn vẹn (Cypher DDL)
 
 ```cypher
-// Ràng buộc tính duy nhất
 CREATE CONSTRAINT unique_phone IF NOT EXISTS
 FOR (p:PhoneNumber) REQUIRE p.phone IS UNIQUE;
 
@@ -207,9 +160,7 @@ CREATE CONSTRAINT unique_phash IF NOT EXISTS
 FOR (i:ImagePhash) REQUIRE i.hash_value IS UNIQUE;
 ```
 
----
-
-### 2.4. Mẫu truy vấn Cypher nghiệp vụ thực tế
+### 2.4. Mẫu truy vấn chính
 
 #### Truy vết đường đi ngắn nhất đến mắt xích lừa đảo trong phạm vi 3 bước
 ```cypher
@@ -220,7 +171,7 @@ ORDER BY hops ASC
 LIMIT 1;
 ```
 
-#### Xuất toàn bộ mạng lưới phục vụ hiển thị Cytoscape.js trên Web
+#### Xuất mạng lưới phục vụ vẽ đồ thị Cytoscape.js
 ```cypher
 MATCH (target:BankAccount {account_number: $account_number, bank_bin: $bank_bin})
 CALL apoc.path.subgraphAll(target, {maxLevel: 2})
