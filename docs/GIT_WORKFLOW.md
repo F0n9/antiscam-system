@@ -89,3 +89,4 @@ Mỗi commit phải giải thích ngắn gọn, rõ ràng thay đổi đã thự
 | **Thứ Hai (20:00 - 20:30)** | **Sprint Planning / Đầu tuần** | Phân chia 2–3 task cụ thể cho từng thành viên trên GitHub Projects. |
 | **Thứ Năm (21:00 - 21:15)** | **Mid-week Sync (Online)** | Báo cáo nhanh các điểm nghẽn kỹ thuật (blocker) để hỗ trợ chéo. |
 | **Chủ Nhật (17:00 - 18:30)** | **Review, Merge & Báo cáo** | Hợp nhất toàn bộ PR vào `develop`, chụp ảnh minh chứng tiến độ, xuất slide/báo cáo gửi GVHD. |
+

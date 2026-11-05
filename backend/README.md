@@ -55,3 +55,4 @@ docker compose up -d backend
   * `neo4j_service.py`: Thực thi câu lệnh Cypher, duyệt đồ thị 3 bước.
   * `scoring_service.py`: Tính điểm tín nhiệm rủi ro theo công thức 4 trọng số.
   * `phash_service.py`: Tính toán mã băm tri giác và so sánh khoảng cách Hamming ảnh.
+

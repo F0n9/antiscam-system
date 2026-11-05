@@ -101,3 +101,4 @@ antiscam-system/
 * [Quy định nhánh Git & Nhịp làm việc hàng tuần](docs/GIT_WORKFLOW.md)
 * [Đặc tả lược đồ CSDL Neo4j & PostgreSQL](docs/DATABASE_SCHEMA.md)
 * [Kế hoạch chi tiết 12 tuần của nhóm](docs/WEEKLY_PLAN.md)
+

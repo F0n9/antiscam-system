@@ -59,3 +59,4 @@
 3. Chờ Gradle đồng bộ (Sync Project with Gradle Files).
 4. Thêm tệp cấu hình `google-services.json` vào thư mục `mobile/app/` để kích hoạt thông báo Firebase.
 5. Chạy thử trên máy ảo hoặc thiết bị Android thật (bật USB Debugging).
+

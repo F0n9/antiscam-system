@@ -25,3 +25,4 @@ Mô tả hiện tượng xảy ra lỗi.
 ```text
 Dán log lỗi hoặc đính kèm ảnh tại đây
 ```
+

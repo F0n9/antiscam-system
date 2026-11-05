@@ -79,3 +79,4 @@ Dự án kéo dài trong 12 tuần của môn học, được chia thành 5 Spri
   * Soạn thảo slide báo cáo nghiệm thu đề tài trước Hội đồng bộ môn.
   * Đóng gói mã nguồn, hồ sơ nghiệm thu cuối kỳ.
 * **Kết quả bàn giao:** Đường dẫn Web App trực tuyến, Tệp APK phát hành, Video Demo, Slide thuyết trình và Báo cáo tổng kết.
+

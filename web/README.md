@@ -41,3 +41,4 @@ Thành phần giao diện người dùng trên nền tảng Web của Hệ thố
 * `/map`: Bản đồ phát sóng cảnh báo lừa đảo xung quanh theo bán kính 3 km.
 * `/report`: Biểu mẫu tiếp nhận tố cáo lừa đảo kèm tải lên chứng từ ủy nhiệm chi ngân hàng.
 * `/admin`: Bảng điều khiển dành cho Quản trị viên kiểm duyệt tranh chấp và tố cáo.
+
