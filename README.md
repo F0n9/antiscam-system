@@ -52,7 +52,7 @@ antiscam-system/
 ├── web/                       # [Module C] Frontend Next.js & Cytoscape
 ├── mobile/                    # [Module D] Ứng dụng Android (Kotlin)
 ├── docs/                      # Tài liệu kỹ thuật dự án
-│   ├── proposal/              # Hồ sơ đề xuất dự án
+│   ├── PROPOSAL.md            # Đề xuất dự án & Phân công trách nhiệm
 │   ├── API_CONTRACT.md        # Đặc tả chi tiết RESTful API giữa các module
 │   ├── DATABASE_SCHEMA.md     # Lược đồ Neo4j & PostgreSQL
 │   ├── GIT_WORKFLOW.md        # Quy chuẩn Git, nhánh và nhịp sinh hoạt tuần
@@ -97,6 +97,7 @@ antiscam-system/
 ---
 
 ## 5. Tài liệu kỹ thuật chi tiết
+* [Đề xuất dự án & Phân công trách nhiệm](docs/PROPOSAL.md)
 * [Đặc tả API Contract giữa các bên](docs/API_CONTRACT.md)
 * [Quy định nhánh Git & Nhịp làm việc hàng tuần](docs/GIT_WORKFLOW.md)
 * [Đặc tả lược đồ CSDL Neo4j & PostgreSQL](docs/DATABASE_SCHEMA.md)
