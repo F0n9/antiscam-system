@@ -47,10 +47,13 @@ antiscam-system/
 │   │   ├── core/              # Config, Security, DB connection
 │   │   ├── models/            # Schema Pydantic và Model DB
 │   │   └── services/          # Logic đồ thị, thuật toán tính điểm, pHash
+│   ├── init-db/               # Script SQL tự động chạy khi khởi tạo PostgreSQL
+│   ├── tests/                 # Unit test cho tính điểm và API
 │   ├── Dockerfile
 │   └── requirements.txt
 ├── web/                       # [Module C] Frontend Next.js & Cytoscape
 ├── mobile/                    # [Module D] Ứng dụng Android (Kotlin)
+├── scripts/                   # Script nạp dữ liệu mồi Neo4j/Postgres (seed_data.py)
 ├── docs/                      # Tài liệu kỹ thuật dự án
 │   ├── PROPOSAL.md            # Đề xuất dự án & Phân công trách nhiệm
 │   ├── API_CONTRACT.md        # Đặc tả chi tiết RESTful API giữa các module
