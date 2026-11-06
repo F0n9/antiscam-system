@@ -171,10 +171,10 @@ Detailed architectural contracts, schemas, and development guides are maintained
 
 ## Contributors
 
-* **Dang Quang Tien** — Server-Side Architecture & Core System Engineer (FastAPI, PostgreSQL, Auth, Verification Engine)
-* **Hoang Khang** — Knowledge Graph Engineer (Neo4j, Cypher, Trust Scoring & Graph Traversal Algorithms)
-* **Truong Bao Nguyen** — Web Frontend Engineer (Next.js, Cytoscape.js Interactive Graph Canvas, Geographic Heatmap)
-* **Sin Thang Quyen** — Mobile & Intelligence Engineer (Android Native, CallScreening, NotificationListener, Family SOS)
+- Đặng Quang Tiến
+- Hoàng Khang
+- Trương Bảo Nguyên
+- Sỉn Thăng Quyền
 
 ---
 
