@@ -69,7 +69,7 @@ SmartGuard computes a normalized **Trust Score (0 – 100)** by aggregating sign
 ### 1. Clone & Configure
 
 ```bash
-git clone https://github.com/your-org/antiscam-system.git
+git clone https://github.com/F0n9/antiscam-system.git
 cd antiscam-system
 cp .env.example .env
 ```
