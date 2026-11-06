@@ -1,12 +1,13 @@
 # PROJECT PROPOSAL
 
-# HỆ THỐNG KIỂM CHỨNG VÀ CẢNH BÁO LỪA ĐẢO TRỰC TUYẾN BẰNG ĐỒ THỊ LIÊN KẾT THỰC THỂ
+# HỆ THỐNG KIỂM CHỨNG VÀ CẢNH BÁO LỪA ĐẢO TRỰC TUYẾN
 
 Đại học Quốc gia Thành phố Hồ Chí Minh  
 Trường Đại học Khoa học Tự nhiên  
 Khoa Công nghệ Thông tin  
 Bộ môn Công nghệ Phần mềm  
 Môn học: Nhập môn Công nghệ Phần mềm  
+Đề tài: Hệ thống kiểm chứng và cảnh báo lừa đảo trực tuyến  
 Lớp học phần: 24_31  
 Nhóm thực hiện: Nhóm 03  
 Giảng viên hướng dẫn: ThS. Ngô Ngọc Đăng Khoa  

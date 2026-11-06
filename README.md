@@ -1,4 +1,7 @@
-# SmartGuard — Online Scam Verification & Entity Knowledge Graph
+# SmartGuard — Online Scam Verification & Warning System
+
+> **Đề tài:** Hệ thống kiểm chứng và cảnh báo lừa đảo trực tuyến  
+> **Môn học:** Nhập môn Công nghệ Phần mềm (24_31) — FIT, HCMUS • **Nhóm:** 03  
 
 [![Platform](https://img.shields.io/badge/Platform-Web%20%7C%20Android%20Native-0d1117?style=flat-square&logo=android&logoColor=white)](#tech-stack)
 [![Backend](https://img.shields.io/badge/Backend-FastAPI%20(Python%203.11)-009688?style=flat-square&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
