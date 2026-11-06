@@ -1,6 +1,6 @@
 # SmartGuard — Online Scam Verification & Entity Knowledge Graph Warning System
 
-[![Platform: Web & Mobile](https://img.shields.io/badge/Platform-Web%20%7C%20Android%20Native-0d1117?style=flat-square&logo=android&logoColor=white)](#system-architecture)
+[![Platform: Web & Mobile](https://img.shields.io/badge/Platform-Web%20%7C%20Android%20Native-0d1117?style=flat-square&logo=android&logoColor=white)](#tech-stack--architecture)
 [![Backend: FastAPI](https://img.shields.io/badge/Backend-FastAPI%20(Python%203.11)-009688?style=flat-square&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![Graph DB: Neo4j](https://img.shields.io/badge/Graph_DB-Neo4j%205.18-008CC1?style=flat-square&logo=neo4j&logoColor=white)](https://neo4j.com)
 [![Database: PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL%2016-336791?style=flat-square&logo=postgresql&logoColor=white)](https://www.postgresql.org)
@@ -13,9 +13,9 @@ A multi-modal cybersecurity and fraud prevention platform designed to verify sus
 
 ## Key Features
 
-- **Multi-Modal Verification Engine:** High-throughput verification of bank accounts, phone numbers, VietQR Napas strings, suspect URLs, and duplicate fraud image detection via 64-bit Perceptual Hashing (`pHash` with Hamming distance threshold $\le 10$).
+- **Multi-Modal Verification Engine:** High-throughput verification of bank accounts, phone numbers, VietQR (Napas EMVCo) strings, suspect URLs, and duplicate fraud image detection via 64-bit Perceptual Hashing (`pHash` with Hamming distance threshold $\le 10$).
 - **Entity Knowledge Graph (Neo4j):** Real-time multi-hop graph traversal (up to 3 hops) linking phone numbers, bank accounts, perceptual image hashes, and community reports to instantly unmask new throwaway SIM cards belonging to known fraud networks.
-- **Android Background Guardian:** Native Kotlin background services utilizing `CallScreeningService` to intercept high-risk scam calls pre-ringtone (< 500 ms) and `NotificationListenerService` to passively parse payment entities from Zalo, Messenger, and SMS without privacy infringement.
+- **Android Background Guardian:** Native Kotlin background services utilizing `CallScreeningService` to intercept high-risk scam calls pre-ringtone (< 500 ms) and `NotificationListenerService` to passively parse payment entities from messaging apps (Zalo, Messenger, SMS) without privacy infringement.
 - **Family SOS Emergency Protocol:** Automated high-priority push notification dispatch via Firebase Cloud Messaging (FCM) to designated family guardians within 1 second when an elderly family member receives high-risk calls (< 25 trust score).
 - **Psychological Manipulation & Scenario Simulation:** Natural language processing flagging 4 major manipulation patterns (urgency, financial lures, authority impersonation, secrecy) with automated 3-step What-If scenario forecasts.
 - **Interactive Graph Visualization:** Web-based forensic analysis dashboard built with Next.js and Cytoscape.js for exploring entity clusters, transaction pathways, and geographic scam density heatmaps.
@@ -93,10 +93,10 @@ $$\text{Credit Score} = 100 - \min\Big(100,\; W_g \cdot S_g + W_p \cdot S_p + W_
 
 | Score Range | Risk Tier | Badge Color | System Action |
 | :---: | :---: | :---: | :--- |
-| **80 – 100** | **An toàn** (Safe) | 🟢 Green | Normal operation; verified safe status. |
-| **50 – 79** | **Cần thận trọng** (Caution) | 🟡 Yellow | Display cautionary note; highlight missing verifiable info. |
-| **25 – 49** | **Nguy cơ cao** (High Risk) | 🟠 Orange | Prominent warning banner; prompt secondary confirmation. |
-| **0 – 24** | **Cực kỳ nguy hiểm** (Critical) | 🔴 Red | Full-screen overlay; block call; trigger instant Family SOS. |
+| **80 – 100** | **Low Risk / Safe** | 🟢 Green | Normal operation; entity verified with clear reputation. |
+| **50 – 79** | **Moderate / Caution** | 🟡 Yellow | Display cautionary note; highlight unverified attributes. |
+| **25 – 49** | **High Risk** | 🟠 Orange | Display prominent warning banner; prompt secondary confirmation. |
+| **0 – 24** | **Critical Danger** | 🔴 Red | Display full-screen overlay; block call; trigger instant Family SOS. |
 
 ---
 
@@ -166,6 +166,15 @@ Detailed architectural contracts, schemas, and development guides are maintained
 * 🗄️ [Database Architecture & Graph Schema](docs/DATABASE_SCHEMA.md)
 * 🌿 [Git Branching Strategy & Workflow Conventions](docs/GIT_WORKFLOW.md)
 * 📐 [System Technical Proposal & Requirements](docs/PROPOSAL.md)
+
+---
+
+## Contributors
+
+* **Dang Quang Tien** — Server-Side Architecture & Core System Engineer (FastAPI, PostgreSQL, Auth, Verification Engine)
+* **Hoang Khang** — Knowledge Graph Engineer (Neo4j, Cypher, Trust Scoring & Graph Traversal Algorithms)
+* **Truong Bao Nguyen** — Web Frontend Engineer (Next.js, Cytoscape.js Interactive Graph Canvas, Geographic Heatmap)
+* **Sin Thang Quyen** — Mobile & Intelligence Engineer (Android Native, CallScreening, NotificationListener, Family SOS)
 
 ---
 
