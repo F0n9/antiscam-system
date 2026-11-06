@@ -569,3 +569,4 @@ if __name__ == "__main__":
     with open(RM_PATH, "w", encoding="utf-8") as f:
         f.write(rm_content)
     print(f"Generated RM: {RM_PATH} ({len(rm_content)} chars)")
+
